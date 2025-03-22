@@ -1,0 +1,31 @@
+# .python-generated
+__pycache__/
+*.py[cod]
+*$py.class
+
+# build/
+dist/
+
+# wheels/
+*.egg-info
+
+# Virtual environment
+.venv/
+
+# Environment variables
+.env
+*.env
+.env.*
+
+# Log files
+*.log
+
+# Temporary files
+*.swp
+*.swo
+
+# SQLite database (if using SQLite)
+*.db
+
+# Exclude the local settings file
+.DS_Store
