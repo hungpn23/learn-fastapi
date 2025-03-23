@@ -7,4 +7,8 @@ class Role(str, Enum):
 class VisibleTo(str, Enum):
     EVERYONE = "everyone"
     JUST_ME = "just me"
-    PEOPLE_WITH_PASSCODE = "people with passcode"
+    PEOPLE_WITH_A_PASSCODE = "people with a passcode"
+
+PUBLIC_ROUTES = {"/auth/login", "/auth/register"}
+
+JWT_SECRET = 'secret'
