@@ -30,8 +30,8 @@ class Set(SQLModel, table=True):
     description: str = Field(nullable=True)
     visibleTo: VisibleTo = Field(default=VisibleTo.JUST_ME)
     passcode: str | None = Field(nullable=True)
-    userId: int = Field(foreign_key="user.id", ondelete="CASCADE")
-    authorId: int = Field(foreign_key="user.id", ondelete="CASCADE")
+    userId: int = Field(foreign_key="user.id")
+    authorId: int = Field(foreign_key="user.id")
 
     user: User | None = Relationship(
         back_populates="setsOwned",
@@ -48,7 +48,8 @@ class Card(SQLModel, table=True):
     term: str
     definition: str
     correctCount: int = Field(nullable=True)
-    setId: int = Field(foreign_key="set.id", ondelete="CASCADE")
+    createdBy: int
+    setId: int = Field(foreign_key="set.id")
 
     set: Set | None = Relationship(back_populates="cards")
 
@@ -60,7 +61,7 @@ def create_db_and_tables():
     SQLModel.metadata.drop_all(engine)
     SQLModel.metadata.create_all(engine)
 
-def get_random_cards():
+def get_random_cards(userId: int):
     rare_words = [
         {"term": "aberration", "definition": "sự lệch lạc, lệch chuẩn"},
         {"term": "acquiesce", "definition": "chịu đựng, đồng thuận mặc dù không hứng thú"},
@@ -76,7 +77,7 @@ def get_random_cards():
     count = random.randint(10, 30)
     shuffled = random.sample(rare_words, len(rare_words))
     selected = shuffled[:count]
-    return [Card(term=word["term"], definition=word["definition"], correctCount=None) for word in selected]
+    return [Card(term=word["term"], definition=word["definition"], correctCount=None, createdBy=userId) for word in selected]
 
 def seed_data(session: Session):
     users = [
@@ -122,7 +123,7 @@ def seed_data(session: Session):
             passcode=None,
             userId=users[0].id,
             authorId=users[0].id,
-            cards=get_random_cards(),
+            cards=get_random_cards(users[0].id),
         ),
         Set(
             name="Từ vựng IELTS Reading 20 - Test 4: Passage 1",
@@ -131,7 +132,7 @@ def seed_data(session: Session):
             passcode="passcode",
             userId=users[0].id,
             authorId=users[0].id,
-            cards=get_random_cards(),
+            cards=get_random_cards(users[0].id),
         ),
         Set(
             name="Từ vựng IELTS Reading 21 - Test 2: Passage 3",
@@ -140,7 +141,7 @@ def seed_data(session: Session):
             passcode=None,
             userId=users[0].id,
             authorId=users[0].id,
-            cards=get_random_cards(),
+            cards=get_random_cards(users[0].id),
         ),
         Set(
             name="Từ vựng IELTS Reading Cambridge 18 - Test 3",
@@ -149,7 +150,7 @@ def seed_data(session: Session):
             passcode=None,
             userId=users[1].id,
             authorId=users[1].id,
-            cards=get_random_cards(),
+            cards=get_random_cards(users[1].id),
         ),
         Set(
             name="Từ vựng IELTS Reading Cambridge 19 - Test 1",
@@ -158,7 +159,7 @@ def seed_data(session: Session):
             passcode=None,
             userId=users[1].id,
             authorId=users[1].id,
-            cards=get_random_cards(),
+            cards=get_random_cards(users[1].id),
         ),
         Set(
             name="Từ vựng IELTS Reading 22 - Test 2: Passage 1",
@@ -167,7 +168,7 @@ def seed_data(session: Session):
             passcode=None,
             userId=users[2].id,
             authorId=users[2].id,
-            cards=get_random_cards(),
+            cards=get_random_cards(users[2].id),
         ),
         Set(
             name="Từ vựng IELTS Reading 23 - Test 5: Passage 4",
@@ -176,7 +177,7 @@ def seed_data(session: Session):
             passcode="passcode",
             userId=users[2].id,
             authorId=users[2].id,
-            cards=get_random_cards(),
+            cards=get_random_cards(users[2].id),
         ),
         Set(
             name="Từ vựng IELTS Reading 24 - Test 3: Passage 3",
@@ -185,7 +186,7 @@ def seed_data(session: Session):
             passcode=None,
             userId=users[3].id,
             authorId=users[3].id,
-            cards=get_random_cards(),
+            cards=get_random_cards(users[3].id),
         ),
         Set(
             name="Từ vựng IELTS Reading Cambridge 20 - Test 2",
@@ -194,7 +195,7 @@ def seed_data(session: Session):
             passcode=None,
             userId=users[4].id,
             authorId=users[4].id,
-            cards=get_random_cards(),
+            cards=get_random_cards(users[4].id),
         ),
     ]
     session.add_all(sets)
@@ -206,4 +207,3 @@ if __name__ == "__main__":
     with Session(engine) as session:
         create_db_and_tables()
         seed_data(session)
-
