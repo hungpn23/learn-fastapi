@@ -9,6 +9,4 @@ class VisibleTo(str, Enum):
     JUST_ME = "just me"
     PEOPLE_WITH_A_PASSCODE = "people with a passcode"
 
-PUBLIC_ROUTES = {"/auth/login", "/auth/register"}
-
-JWT_SECRET = 'secret'
+PUBLIC_ROUTES = {"/auth/login", "/auth/register", "/auth/google", "/auth/google/callback"}

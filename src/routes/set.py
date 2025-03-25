@@ -3,7 +3,7 @@ from sqlmodel import SQLModel, and_, join, not_, select, or_
 
 from ..dependencies import SessionDep
 from ..models import Card, Set, User
-from ..constant import JWT_SECRET, VisibleTo
+from ..constant import VisibleTo
 
 router = APIRouter(
     prefix="/set",
