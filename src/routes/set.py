@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Request
-from sqlmodel import SQLModel, and_, join, not_, select, or_
+from sqlmodel import SQLModel, and_, not_, select, or_
 
 from ..dependencies import SessionDep
 from ..models import Card, Set, User
